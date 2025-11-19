@@ -1,7 +1,7 @@
 {
   "name": "worksphere",
   "version": "1.0.0",
-  "description": "",
+  "description": "WorkSphere est une application web interactive permettant de gérer et d’organiser les employés sur un **plan d’étage dynamique**.  \r L’objectif est de faciliter la visualisation, le placement et la répartition du personnel tout en respectant les **rôles**, **permissions** et **zones autorisées**.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -12,5 +12,14 @@
   "dependencies": {
     "@tailwindcss/cli": "^4.1.17",
     "tailwindcss": "^4.1.17"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/houssamlargou/WorkSphere.git"
+  },
+  "bugs": {
+    "url": "https://github.com/houssamlargou/WorkSphere/issues"
+  },
+  "homepage": "https://github.com/houssamlargou/WorkSphere#readme"
 }
