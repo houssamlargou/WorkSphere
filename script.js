@@ -4,6 +4,15 @@ const highlight = document.getElementById("highlight");
 const header = document.getElementById("header");
 const employeeForm = document.getElementById("employee-form");
 const closeIcon = document.getElementById("form__close-icon");
+// form
+const usernameInput = document.getElementById("username-input");
+let roleSelect = document.getElementById("role-select");
+const emailInput = document.getElementById("email-input");
+const phoneInput = document.getElementById("phone-input");
+
+roleSelect.addEventListener("change", function (e) {
+  roleSelect = e.target.value;
+});
 
 // show-form;
 function showForm() {
