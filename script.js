@@ -18,6 +18,9 @@ roleSelect.addEventListener("change", function (e) {
 });
 // delete
 const deleteIcon = document.querySelectorAll(".delete-icon");
+// add experiences
+const addExperienceBtn = document.getElementById("add-experience");
+const experienceContent = document.getElementById("experience-content");
 
 // show-form;
 function showForm() {
@@ -41,7 +44,7 @@ highlight.addEventListener("click", hideForm);
 // form
 let id = 1;
 let dataIndex = 0;
-let data = [];
+let employees = [];
 employeeForm.addEventListener("submit", function (e) {
   e.preventDefault();
   if (
@@ -52,7 +55,7 @@ employeeForm.addEventListener("submit", function (e) {
   )
     return;
 
-  data.push({
+  employees.push({
     id: id,
     username: usernameInput.value,
     role: roleSelect,
@@ -61,13 +64,13 @@ employeeForm.addEventListener("submit", function (e) {
   });
   let cardContent = `
   <div
-  data-id="${data[dataIndex].id}"
-  id="employee-card-${data[dataIndex].id}"
+  data-id="${employees[dataIndex].id}"
+  id="employee-card-${employees[dataIndex].id}"
           class="employee-card flex justify-between p-4 shadow-[0_0_20px_rgba(0,0,0,0.1)] rounded-lg"
         >
           <div class="flex gap-2.5 items-center">
             <div class="w-8 h-8 bg-black"></div>
-            <div>${data[dataIndex].username} - ${data[dataIndex].role}</div>
+            <div>${employees[dataIndex].username} - ${employees[dataIndex].role}</div>
           </div>
           <div class="delete-icon cursor-pointer">
             <svg
@@ -96,6 +99,54 @@ employeeForm.addEventListener("submit", function (e) {
 
 employeeCardsContainer.addEventListener("click", function (e) {
   let deleteTarget = e.target.closest(".delete-icon");
+  let idTarget = e.target.closest(".employee-card").dataset.id;
+  console.log(idTarget);
   if (!deleteTarget) return;
   deleteTarget.closest(".employee-card").remove();
+  for (const i in employees) {
+    if (employees[i].id == idTarget) employees.splice(i, 1);
+  }
+});
+
+// add experiences
+let newExperience;
+addExperienceBtn.addEventListener("click", function () {
+  newExperience = `
+          <div class="p-3 rounded-lg flex flex-col gap-4 bg-neutral-950/3">
+            <div class="flex flex-col">
+              <span class="font-bold">Entreprise</span>
+              <input
+                type="text"
+                class="border border-neutral-700/20 py-2 px-3 rounded-lg bg-white"
+              />
+            </div>
+            <div class="flex flex-col">
+              <span class="font-bold">Date début</span>
+              <input
+                id="dateDebut-input"
+                type="date"
+                class="border border-neutral-700/20 py-2 px-3 rounded-lg bg-white w-full"
+                placeholder="jj/mm/aaaa"
+              />
+            </div>
+            <div class="flex flex-col">
+              <span class="font-bold">Date fin</span>
+              <input
+                id="dateFin-input"
+                type="date"
+                placeholder="jj/mm/aaaa"
+                class="border border-neutral-700/20 py-2 px-3 rounded-lg bg-white w-full"
+              />
+            </div>
+            <div class="flex flex-col gap-0.5">
+              <span class="font-bold">Description</span>
+              <textarea
+                id="description-input"
+                placeholder="Ajouter une description..."
+                class="h-20 bg-white p-3"
+              ></textarea>
+            </div>
+          </div>
+  `;
+  experienceContent.insertAdjacentHTML("beforeend", newExperience);
 });
