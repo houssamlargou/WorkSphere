@@ -68,11 +68,11 @@
     >
       <button
         id="add-employee-btn"
-        class="bg-green-400 px-6 py-3 font-bold rounded-lg w-fit"
+        class="bg-green-400 px-6 py-3 font-bold rounded-lg w-fit cursor-pointer"
       >
         + Ajouter un employé
       </button>
-      <section class="flex flex-col gap-4">
+      <section id="employee-cards_container" class="flex flex-col gap-4">
         <div
           id="employee"
           class="flex justify-between p-4 shadow-[0_0_20px_rgba(0,0,0,0.1)] rounded-lg"
@@ -81,7 +81,7 @@
             <div class="w-8 h-8 bg-black"></div>
             <div>Jane Smith - Technicien IT</div>
           </div>
-          <div id="delete-icon">
+          <div id="delete-icon" class="cursor-pointer">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               x="0px"
@@ -98,6 +98,7 @@
           </div>
         </div>
         <div
+        id="employee-card"
           class="flex justify-between p-4 shadow-[0_0_20px_rgba(0,0,0,0.1)] shadow-neutral-950/10 rounded-lg"
         >
           <div class="flex gap-2.5 items-center">
