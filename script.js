@@ -16,6 +16,8 @@ const employeeCardsContainer = document.getElementById(
 roleSelect.addEventListener("change", function (e) {
   roleSelect = e.target.value;
 });
+// delete
+const deleteIcon = document.querySelectorAll(".delete-icon");
 
 // show-form;
 function showForm() {
@@ -57,18 +59,17 @@ employeeForm.addEventListener("submit", function (e) {
     email: emailInput.value,
     phone: phoneInput.value,
   });
-  console.log(data);
   let cardContent = `
-    <div
-          id="employee"
-          data-id="${data[dataIndex].id}"
-          class="flex justify-between p-4 shadow-[0_0_20px_rgba(0,0,0,0.1)] rounded-lg"
+  <div
+  data-id="${data[dataIndex].id}"
+  id="employee-card-${data[dataIndex].id}"
+          class="employee-card flex justify-between p-4 shadow-[0_0_20px_rgba(0,0,0,0.1)] rounded-lg"
         >
           <div class="flex gap-2.5 items-center">
             <div class="w-8 h-8 bg-black"></div>
             <div>${data[dataIndex].username} - ${data[dataIndex].role}</div>
           </div>
-          <div id="delete-icon">
+          <div class="delete-icon cursor-pointer">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               x="0px"
@@ -89,4 +90,12 @@ employeeForm.addEventListener("submit", function (e) {
   dataIndex++;
   id++;
   hideForm();
+});
+
+// delete
+
+employeeCardsContainer.addEventListener("click", function (e) {
+  let deleteTarget = e.target.closest(".delete-icon");
+  if (!deleteTarget) return;
+  deleteTarget.closest(".employee-card").remove();
 });
