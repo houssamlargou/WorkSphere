@@ -82,7 +82,7 @@ function addEmployeeFormHandle(e) {
           class="employee-card flex justify-between p-4 shadow-[0_0_20px_rgba(0,0,0,0.1)] rounded-lg items-center"
         >
           <div id="userProfileContainer" class="flex gap-2.5 items-center">
-            <div class="userProfile w-12 h-12 rounded-full overflow-hidden">
+            <div class="userProfile w-10 h-10 rounded-full overflow-hidden">
             <img src="${employees[dataIndex].url}" class="w-full h-full object-cover object-center" />
             </div>
             <div>${employees[dataIndex].username} - ${employees[dataIndex].role}</div>
