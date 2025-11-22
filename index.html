@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>WorkSphere</title>
     <link rel="stylesheet" href="output.css" />
+    <link
+      href="https://cdn.boxicons.com/3.0.4/fonts/basic/boxicons.min.css"
+      rel="stylesheet"
+    />
     <script src="script.js" defer></script>
   </head>
   <body class="">
@@ -38,7 +42,9 @@
           <div
             id="conference-room"
             class="row-start-2 row-end-27 col-start-2 col-end-31 border-3 border-amber-400"
-          ></div>
+          >
+          <!-- <i class="bxr bx-plus"> -->
+        </div>
           <div
             id="server-room"
             class="row-start-2 row-end-28 col-start-45 col-end-62 border-3 border-amber-400"
@@ -68,20 +74,19 @@
     >
       <button
         id="add-employee-btn"
-        class="bg-green-400 px-6 py-3 font-bold rounded-lg w-fit"
+        class="bg-green-400 px-6 py-3 font-bold rounded-lg w-fit cursor-pointer"
       >
         + Ajouter un employé
       </button>
-      <section class="flex flex-col gap-4">
+      <section id="employee-cards_container" class="flex flex-col gap-4">
         <div
-          id="employee"
-          class="flex justify-between p-4 shadow-[0_0_20px_rgba(0,0,0,0.1)] rounded-lg"
+          class="employee-card flex justify-between p-4 shadow-[0_0_20px_rgba(0,0,0,0.1)] rounded-lg items-center"
         >
           <div class="flex gap-2.5 items-center">
-            <div class="w-8 h-8 bg-black"></div>
+            <i class="bxr bxs-user-circle text-neutral-950 text-5xl"></i>
             <div>Jane Smith - Technicien IT</div>
           </div>
-          <div id="delete-icon">
+          <div class="delete-icon cursor-pointer">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               x="0px"
@@ -98,13 +103,13 @@
           </div>
         </div>
         <div
-          class="flex justify-between p-4 shadow-[0_0_20px_rgba(0,0,0,0.1)] shadow-neutral-950/10 rounded-lg"
+          class="employee-card flex justify-between p-4 shadow-[0_0_20px_rgba(0,0,0,0.1)] shadow-neutral-950/10 rounded-lg"
         >
           <div class="flex gap-2.5 items-center">
             <div class="w-8 h-8 bg-black"></div>
             <div>Jane Smith - Technicien IT</div>
           </div>
-          <div id="delete-icon" class="">
+          <div id="" class="delete-icon cursor-pointer">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               x="0px"
@@ -159,16 +164,19 @@
         </div>
         <div id="roles" class="flex flex-col gap-1">
           <span id="roles-title" class="font-bold">Rôle*</span>
-          <select class="border border-neutral-700/20 py-2 px-3 rounded-lg">
+          <select
+            id="role-select"
+            class="border border-neutral-700/20 py-2 px-3 rounded-lg"
+          >
             <option value="" disabled selected hidden>
               Sélectionner un rôle..
             </option>
-            <option value="receptionniste">Réceptionniste</option>
-            <option value="technicien-it">Technicien IT</option>
-            <option value="agent-securite">Agent de sécurité</option>
-            <option value="manager">Manager</option>
-            <option value="nettoyage">Agent de nettoyage</option>
-            <option value="autre">Autre</option>
+            <option value="Réceptionniste">Réceptionniste</option>
+            <option value="Technicien IT">Technicien IT</option>
+            <option value="Agent de sécurité">Agent de sécurité</option>
+            <option value="Manager">Manager</option>
+            <option value="Agent de nettoyage">Agent de nettoyage</option>
+            <option value="Autre">Autre</option>
           </select>
         </div>
         <div id="email" class="flex flex-col gap-1">
@@ -194,10 +202,12 @@
           <div
             class="p-2 flex items-center gap-1 border rounded-lg border-neutral-700/20"
           >
-            <button class="bg-[#E5E5E5] p-1 border border-neutral-950/20">
-              Choisir un fichier
-            </button>
-            <p>Aucun fichier choisi</p>
+            <input
+              type="file"
+              accept="image/jpeg, image/png, image/jpg"
+              id="photo-input"
+              class=""
+            />
           </div>
         </div>
         <div id="experiences" class="flex flex-col gap-2 pt-4">
@@ -207,39 +217,42 @@
               + Ajouter
             </button>
           </div>
-          <div class="p-3 rounded-lg flex flex-col gap-4 bg-neutral-950/3">
-            <div class="flex flex-col">
-              <span class="font-bold">Entreprise</span>
-              <input
-                type="text"
-                class="border border-neutral-700/20 py-2 px-3 rounded-lg bg-white"
-              />
-            </div>
-            <div class="flex flex-col">
-              <span class="font-bold">Date début</span>
-              <input
-                id="dateDebut-input"
-                type="date"
-                class="border border-neutral-700/20 py-2 px-3 rounded-lg bg-white w-full"
-                placeholder="jj/mm/aaaa"
-              />
-            </div>
-            <div class="flex flex-col">
-              <span class="font-bold">Date fin</span>
-              <input
-                id="dateFin-input"
-                type="date"
-                placeholder="jj/mm/aaaa"
-                class="border border-neutral-700/20 py-2 px-3 rounded-lg bg-white w-full"
-              />
-            </div>
-            <div class="flex flex-col gap-0.5">
-              <span class="font-bold">Description</span>
-              <textarea
-                id="description-input"
-                placeholder="Ajouter une description..."
-                class="h-20 bg-white p-3"
-              ></textarea>
+
+          <div id="experience-content" class="flex flex-col gap-4">
+            <div class="p-3 rounded-lg flex flex-col gap-4 bg-neutral-950/3">
+              <div class="flex flex-col">
+                <span class="font-bold">Entreprise</span>
+                <input
+                  type="text"
+                  class="border border-neutral-700/20 py-2 px-3 rounded-lg bg-white"
+                />
+              </div>
+              <div class="flex flex-col">
+                <span class="font-bold">Date début</span>
+                <input
+                  id="dateDebut-input"
+                  type="date"
+                  class="border border-neutral-700/20 py-2 px-3 rounded-lg bg-white w-full"
+                  placeholder="jj/mm/aaaa"
+                />
+              </div>
+              <div class="flex flex-col">
+                <span class="font-bold">Date fin</span>
+                <input
+                  id="dateFin-input"
+                  type="date"
+                  placeholder="jj/mm/aaaa"
+                  class="border border-neutral-700/20 py-2 px-3 rounded-lg bg-white w-full"
+                />
+              </div>
+              <div class="flex flex-col gap-0.5">
+                <span class="font-bold">Description</span>
+                <textarea
+                  id="description-input"
+                  placeholder="Ajouter une description..."
+                  class="h-20 bg-white p-3"
+                ></textarea>
+              </div>
             </div>
           </div>
         </div>
