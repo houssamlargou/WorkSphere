@@ -14,7 +14,7 @@ const employeeCardsContainer = document.getElementById(
 );
 
 roleSelect.addEventListener("change", function (e) {
-  roleSelect = e.target.value;
+  roleValue = e.target.value;
 });
 // delete
 const deleteIcon = document.querySelectorAll(".delete-icon");
@@ -23,6 +23,9 @@ const addExperienceBtn = document.getElementById("add-experience");
 const experienceContent = document.getElementById("experience-content");
 //photo
 const photoInput = document.getElementById("photo-input");
+// add icon
+const addIcon = document.querySelectorAll(".add-icon");
+const cardRoom = document.getElementById("card-room");
 
 // show-form;
 function showForm() {
@@ -44,14 +47,19 @@ function hideForm() {
 closeIcon.addEventListener("click", hideForm);
 highlight.addEventListener("click", hideForm);
 // form
+// let list = [];
 let id = 1;
 let dataIndex = 0;
 let employees = [];
-imageURL = "";
+let receptionniste = [];
+let securite = [];
+let manager = [];
+let nettoyage = [];
+let it = [];
+let imageURL = "";
 
 function addEmployeeFormHandle(e) {
   e.preventDefault();
-  console.log(imageURL);
   if (photoInput.files && photoInput.files.length > 0) {
     imageURL = URL.createObjectURL(photoInput.files[0]);
   } else {
@@ -62,14 +70,14 @@ function addEmployeeFormHandle(e) {
     usernameInput.value == "" ||
     emailInput.value == "" ||
     phoneInput.value == "" ||
-    roleSelect.value == ""
+    roleValue == ""
   )
     return;
 
   employees.push({
     id: id,
     username: usernameInput.value,
-    role: roleSelect,
+    role: roleValue,
     email: emailInput.value,
     phone: phoneInput.value,
     url: imageURL,
@@ -82,11 +90,11 @@ function addEmployeeFormHandle(e) {
           class="employee-card flex justify-between p-4 shadow-[0_0_20px_rgba(0,0,0,0.1)] rounded-lg items-center"
         >
           <div id="userProfileContainer" class="flex gap-2.5 items-center">
-            <div class="userProfile w-12 h-12 rounded-full overflow-hidden">
+            <div class="userProfile w-10 h-10 rounded-full overflow-hidden">
             <img src="${employees[dataIndex].url}" class="w-full h-full object-cover object-center" />
             </div>
             <div>${employees[dataIndex].username} - ${employees[dataIndex].role}</div>
-          </div>
+            </div>
           <div class="delete-icon cursor-pointer">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -103,8 +111,19 @@ function addEmployeeFormHandle(e) {
             </svg>
           </div>
         </div>
-    `;
+        `;
   employeeCardsContainer.insertAdjacentHTML("beforeend", cardContent);
+  // roles
+  if (employees[dataIndex].role == "receptionniste")
+    receptionniste.push(employees[dataIndex]);
+  else if (employees[dataIndex].role == "it") it.push(employees[dataIndex]);
+  else if (employees[dataIndex].role == "securite")
+    securite.push(employees[dataIndex]);
+  else if (employees[dataIndex].role == "manager")
+    manager.push(employees[dataIndex]);
+  else if (employees[dataIndex].role == "nettoyage")
+    nettoyage.push(employees[dataIndex]);
+  ///////////////////////////////
   dataIndex++;
   id++;
   hideForm();
@@ -165,3 +184,118 @@ addExperienceBtn.addEventListener("click", function () {
   `;
   experienceContent.insertAdjacentHTML("beforeend", newExperience);
 });
+// rooms
+let conference = [];
+let reception = [];
+let serveurs = [];
+let securiteRoom = [];
+let personnel = [];
+let archives = [];
+
+// + icon
+// conference
+let cardRoomContent;
+let cardRoomCount = 0;
+let workerName = "";
+
+addIcon.forEach((el) => {
+  el.addEventListener("click", function (e) {
+    if (conference.length >= 5) return;
+    if (e.target.closest("#conference-room")) {
+      if (receptionniste.length == 1) {
+        workerName = receptionniste[0].username
+          .split(" ")
+          .map((el) => el[0])
+          .join("")
+          .toUpperCase("");
+        cardRoomContent = `
+      <div
+                class="bg-amber-900 flex items-center justify-center flex-col relative"
+              >
+                            <i class='bx bxs-minus-circle text-red-700 text-[10px] absolute top-0 right-0 translate-x-1/3 -translate-y-1/3'></i> 
+
+                <div class="userProfile w-3 h-3 rounded-full overflow-hidden">
+                  <img
+                    src="${receptionniste[0].url}"
+                    class="w-full h-full object-cover object-center"
+                  />
+                </div>
+                <p class="text-amber-100 text-[10px]">${workerName}</p>
+              </div>
+      `;
+        cardRoom.insertAdjacentHTML("beforeend", cardRoomContent);
+        document.querySelectorAll(".employee-card").forEach((el) => {
+          if (el.closest(`#employee-card-${receptionniste[0].id}`)) {
+            el.classList.add("hidden");
+          }
+        });
+        conference.push(receptionniste[0]);
+        receptionniste = [];
+      } else if (receptionniste.length > 1 && receptionniste.length <= 6) {
+        document.getElementById("hadi").innerHTML = "";
+        document.getElementById("hadi").classList.remove("hidden");
+        document
+          .getElementById("hadi")
+          .classList.add("flex", "flex-col", "gap-2");
+        for (let i = 0; i < receptionniste.length; i++) {
+          document.getElementById("hadi").insertAdjacentHTML(
+            "beforeend",
+            `
+          <div
+          data-id="${receptionniste[i].id}"
+          id="conference-card-${receptionniste[i].id}"
+          class="conference-card flex flex-col justify-between p-4 rounded-lg items-center gap-2 shadow-[0_0_20px_rgba(0,0,0,0.1)]"
+        >
+        <div id="userProfileContainer" class="flex gap-2.5 items-center">
+            <div class="userProfile w-10 h-10 rounded-full overflow-hidden">
+            <img src="${receptionniste[i].url}" class="w-full h-full object-cover object-center" />
+            </div>
+            <div>${receptionniste[i].username} - ${receptionniste[i].role}</div>
+          </div>
+        </div>
+            `
+          );
+        }
+      } else return;
+    }
+    // receptionniste = [];
+  });
+});
+
+document.getElementById("hadi").addEventListener("click", function (e) {
+  const card = e.target.closest(".conference-card");
+  if (!card) return;
+  const cardId = +e.target.closest(".conference-card").dataset.id;
+  for (let i = 0; i < receptionniste.length; i++) {
+    if (receptionniste[i].id == cardId) {
+      conference.push(receptionniste[i]);
+      receptionniste.splice(i, 1);
+    }
+  }
+  document.getElementById(`employee-card-${cardId}`).classList.add("hidden");
+  card.classList.add("hidden");
+  document.getElementById("hadi").classList.remove("flex", "flex-col", "gap-2");
+  document.getElementById("hadi").classList.add("hidden");
+  const uniqueWorker = employees.find((el) => el.id == cardId);
+  workerName = uniqueWorker.username
+    .split(" ")
+    .map((el) => el[0])
+    .join("")
+    .toUpperCase("");
+  cardRoomContent = `
+      <div
+                class="bg-amber-900 flex items-center justify-center flex-col relative"
+              >
+              <i class='bx bxs-minus-circle text-red-700 text-[10px] absolute top-0 right-0 translate-x-1/3 -translate-y-1/3'></i> 
+                <div class="userProfile w-3 h-3 rounded-full overflow-hidden">
+                  <img
+                    src="${uniqueWorker.url}"
+                    class="w-full h-full object-cover object-center"
+                  />
+                </div>
+                <p class="text-amber-100 text-[10px]">${workerName}</p>
+              </div>
+      `;
+  cardRoom.insertAdjacentHTML("beforeend", cardRoomContent);
+});
+
