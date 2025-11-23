@@ -47,8 +47,8 @@ function hideForm() {
 closeIcon.addEventListener("click", hideForm);
 highlight.addEventListener("click", hideForm);
 // form
-// let list = [];
 let id = 1;
+let list = [];
 let dataIndex = 0;
 let employees = [];
 let receptionniste = [];
@@ -82,7 +82,6 @@ function addEmployeeFormHandle(e) {
     phone: phoneInput.value,
     url: imageURL,
   });
-  console.log(employees[dataIndex].url);
   let cardContent = `
   <div
   data-id="${employees[dataIndex].id}"
@@ -113,6 +112,8 @@ function addEmployeeFormHandle(e) {
         </div>
         `;
   employeeCardsContainer.insertAdjacentHTML("beforeend", cardContent);
+  // list
+  list.push(employees[dataIndex]);
   // roles
   if (employees[dataIndex].role == "receptionniste")
     receptionniste.push(employees[dataIndex]);
@@ -209,10 +210,10 @@ addIcon.forEach((el) => {
           .join("")
           .toUpperCase("");
         cardRoomContent = `
-      <div
-                class="bg-amber-900 flex items-center justify-center flex-col relative"
+       <div
+               data-id="${receptionniste[0].id}" class="room-worker bg-amber-900 flex items-center justify-center flex-col relative"
               >
-                            <i class='bx bxs-minus-circle text-red-700 text-[10px] absolute top-0 right-0 translate-x-1/3 -translate-y-1/3'></i> 
+                            <i class='remove-icon bx bxs-minus-circle text-red-700 text-[10px] absolute top-0 right-0 translate-x-1/3 -translate-y-1/3'></i> 
 
                 <div class="userProfile w-3 h-3 rounded-full overflow-hidden">
                   <img
@@ -222,23 +223,23 @@ addIcon.forEach((el) => {
                 </div>
                 <p class="text-amber-100 text-[10px]">${workerName}</p>
               </div>
-      `;
+       `;
         cardRoom.insertAdjacentHTML("beforeend", cardRoomContent);
-        document.querySelectorAll(".employee-card").forEach((el) => {
-          if (el.closest(`#employee-card-${receptionniste[0].id}`)) {
-            el.classList.add("hidden");
-          }
-        });
-        conference.push(receptionniste[0]);
-        receptionniste = [];
-      } else if (receptionniste.length > 1 && receptionniste.length <= 6) {
-        document.getElementById("hadi").innerHTML = "";
-        document.getElementById("hadi").classList.remove("hidden");
         document
-          .getElementById("hadi")
-          .classList.add("flex", "flex-col", "gap-2");
+          .getElementById(`employee-card-${receptionniste[0].id}`)
+          .remove();
+        conference.push(receptionniste[0]);
+        list.find((el, i) => {
+          if (el.id == receptionniste[0].id) list.splice(i, 1);
+        });
+        receptionniste.splice(0, 1);
+        // receptionniste = [];
+      } else if (receptionniste.length > 1 && receptionniste.length <= 6) {
+        selectWorkerConference.innerHTML = "";
+        selectWorkerConference.classList.remove("hidden");
+        selectWorkerConference.classList.add("flex", "flex-col", "gap-2");
         for (let i = 0; i < receptionniste.length; i++) {
-          document.getElementById("hadi").insertAdjacentHTML(
+          selectWorkerConference.insertAdjacentHTML(
             "beforeend",
             `
           <div
@@ -258,24 +259,24 @@ addIcon.forEach((el) => {
         }
       } else return;
     }
-    // receptionniste = [];
   });
 });
-
-document.getElementById("hadi").addEventListener("click", function (e) {
+//////////////////////////////////////
+const selectWorkerConference = document.getElementById(
+  "select-worker-conference"
+);
+selectWorkerConference.addEventListener("click", function (e) {
   const card = e.target.closest(".conference-card");
   if (!card) return;
   const cardId = +e.target.closest(".conference-card").dataset.id;
-  for (let i = 0; i < receptionniste.length; i++) {
-    if (receptionniste[i].id == cardId) {
-      conference.push(receptionniste[i]);
-      receptionniste.splice(i, 1);
-    }
-  }
+  const index = receptionniste.findIndex((el) => el.id == cardId);
+  const worker = receptionniste[index];
+  conference.push(worker);
+  receptionniste.splice(index, 1);
   document.getElementById(`employee-card-${cardId}`).classList.add("hidden");
   card.classList.add("hidden");
-  document.getElementById("hadi").classList.remove("flex", "flex-col", "gap-2");
-  document.getElementById("hadi").classList.add("hidden");
+  selectWorkerConference.classList.remove("flex", "flex-col", "gap-2");
+  selectWorkerConference.classList.add("hidden");
   const uniqueWorker = employees.find((el) => el.id == cardId);
   workerName = uniqueWorker.username
     .split(" ")
@@ -284,9 +285,9 @@ document.getElementById("hadi").addEventListener("click", function (e) {
     .toUpperCase("");
   cardRoomContent = `
       <div
-                class="bg-amber-900 flex items-center justify-center flex-col relative"
+                id="room-worker-${uniqueWorker.id}" data-id="${uniqueWorker.id}" class="room-worker bg-amber-900 flex items-center justify-center flex-col relative"
               >
-              <i class='bx bxs-minus-circle text-red-700 text-[10px] absolute top-0 right-0 translate-x-1/3 -translate-y-1/3'></i> 
+              <i class='remove-icon bx bxs-minus-circle text-red-700 text-[10px] absolute top-0 right-0 translate-x-1/3 -translate-y-1/3'></i> 
                 <div class="userProfile w-3 h-3 rounded-full overflow-hidden">
                   <img
                     src="${uniqueWorker.url}"
@@ -296,6 +297,47 @@ document.getElementById("hadi").addEventListener("click", function (e) {
                 <p class="text-amber-100 text-[10px]">${workerName}</p>
               </div>
       `;
+  document.getElementById(`employee-card-${cardId}`).remove();
   cardRoom.insertAdjacentHTML("beforeend", cardRoomContent);
 });
 
+cardRoom.addEventListener("click", function (e) {
+  const removeBtn = e.target.closest(".remove-icon");
+  if (!removeBtn) return;
+  const removeBtnId = +removeBtn.closest(".room-worker").dataset.id;
+  let uniqueWorker = conference.find((el) => el.id == removeBtnId);
+  let index = conference.findIndex((el) => el.id == removeBtnId);
+  receptionniste.push(conference[index]);
+  conference.splice(index, 1);
+  let cardContent = `
+  <div
+  data-id="${uniqueWorker.id}"
+  id="employee-card-${uniqueWorker.id}"
+          class="employee-card flex justify-between p-4 shadow-[0_0_20px_rgba(0,0,0,0.1)] rounded-lg items-center"
+        >
+          <div id="userProfileContainer" class="flex gap-2.5 items-center">
+            <div class="userProfile w-10 h-10 rounded-full overflow-hidden">
+            <img src="${uniqueWorker.url}" class="w-full h-full object-cover object-center" />
+            </div>
+            <div>${uniqueWorker.username} - ${uniqueWorker.role}</div>
+            </div>
+          <div class="delete-icon cursor-pointer">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              x="0px"
+              y="0px"
+              width="30"
+              height="30"
+              viewBox="0 0 30 30"
+              style="fill: #fa5252"
+            >
+              <path
+                d="M 14.984375 2.4863281 A 1.0001 1.0001 0 0 0 14 3.5 L 14 4 L 8.5 4 A 1.0001 1.0001 0 0 0 7.4863281 5 L 6 5 A 1.0001 1.0001 0 1 0 6 7 L 24 7 A 1.0001 1.0001 0 1 0 24 5 L 22.513672 5 A 1.0001 1.0001 0 0 0 21.5 4 L 16 4 L 16 3.5 A 1.0001 1.0001 0 0 0 14.984375 2.4863281 z M 6 9 L 7.7929688 24.234375 C 7.9109687 25.241375 8.7633438 26 9.7773438 26 L 20.222656 26 C 21.236656 26 22.088031 25.241375 22.207031 24.234375 L 24 9 L 6 9 z"
+              ></path>
+            </svg>
+            </div>
+            </div>
+            `;
+  employeeCardsContainer.insertAdjacentHTML("beforeend", cardContent);
+  removeBtn.closest(".room-worker").classList.add("hidden");
+});
