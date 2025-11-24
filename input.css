@@ -1,6 +1,9 @@
 @import "tailwindcss";
 
+.color {
+  background: #00000072;
+}
 
-.color{
-    background: #00000072;
+.hide {
+  display: none;
 }

@@ -54,7 +54,6 @@ let employees = [];
 let imageURL = "";
 roleSelect.addEventListener("change", function (e) {
   roleValue = e.target.value;
-  
 });
 function addEmployeeFormHandle(e) {
   e.preventDefault();
@@ -82,9 +81,7 @@ function addEmployeeFormHandle(e) {
   });
 
   console.log(roleValue);
-  
 
- 
   ///////////////////////////////
   dataIndex++;
   id++;
@@ -143,8 +140,11 @@ const cardRoomsServer = document.getElementById("card-room-server");
 const cardRoomsSc = document.getElementById("card-room-security");
 const cardRoomsPr = document.getElementById("card-room-staff");
 const cardRoomsAr = document.getElementById("card-room-archive");
-const prolifeWorkersPost = document.getElementById("profile-workers-post")
-const prolifeWorker = document.getElementById("profile-worker")
+const prolifeWorkersPost = document.getElementById("profile-workers-post");
+const prolifeWorker = document.getElementById("profile-worker");
+
+console.log(prolifeWorkersPost, prolifeWorker);
+
 // rooms
 let conference = [];
 let receptionW = [];
@@ -165,12 +165,12 @@ addSalles.forEach((el, index) => {
   el.addEventListener("click", () => {
     postWorkers(salles[index]);
 
-    selectWorkers.classList.remove("hidden");
+    selectWorkers.classList.remove("hide");
   });
 });
 
 closeBtn.addEventListener("click", () => {
-  selectWorkers.classList.add("hidden");
+  selectWorkers.classList.add("hide");
 });
 
 let arrWorkers = [];
@@ -233,7 +233,7 @@ function postWorkers(salle) {
               alt="profile"
             />
             <div class="">
-              <p id="profile-${el.id}" class="font-semibold text-xl">${el.username}</p>
+              <p id="profile-user-${el.id}" class="font-semibold text-xl">${el.username}</p>
               <p class="font-semibold">${el.role}</p>
             </div>
             <p id="plus-${el.id}" class="font-semibold cursor-pointer text-gray-600 ml-auto">&plus;</p>
@@ -241,20 +241,17 @@ function postWorkers(salle) {
 `;
   });
 
-  arrWorkers.forEach((el)=>{
-    const openProfile = document.getElementById(`profile-${el.id}`)
-  console.log(openProfile);
-  
-    openProfile.addEventListener('click' , ()=>{
+  arrWorkers.forEach((el) => {
+    const openProfile = document.getElementById(`profile-user-${el.id}`);
+    console.log(openProfile);
 
+    openProfile.addEventListener("click", () => {
+      console.log("kgjhbhj");
 
-      profile(el)
-    })
-  
-  })
-
-
-  
+      prolifeWorker.classList.remove("hide");
+      profile(el);
+    });
+  });
 
   arrWorkers.forEach((el) => {
     const plus = document.getElementById(`plus-${el.id}`);
@@ -344,14 +341,13 @@ function removeCardFromSalle(el, salle) {
       break;
   }
 
- 
-// call functions for updating
+  // call functions for updating
   Conference();
   Reception();
   Serveur();
-  Security()
-  Personnel()
-  Archives()
+  Security();
+  Personnel();
+  Archives();
   postWorkers();
   displaWorker();
 }
@@ -515,13 +511,10 @@ function remove(el) {
   });
 }
 
-function profile(el){
-
+function profile(el) {
   console.log(el);
-  
-  prolifeWorker.classList.remove("hidden")
 
-  prolifeWorkersPost.innerHTML=`
+  prolifeWorkersPost.innerHTML = `
   
           <p
           id="closeBtn-profile"
@@ -557,9 +550,9 @@ function profile(el){
         </div>
   
   
-  `
-}
+  `;
 
-////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
+  document.getElementById("closeBtn-profile").addEventListener("click", () => {
+    prolifeWorker.classList.add("hide");
+  });
+}
