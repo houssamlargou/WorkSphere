@@ -163,6 +163,7 @@ const salles = [
 ];
 addSalles.forEach((el, index) => {
   el.addEventListener("click", () => {
+    console.log(salles[index]);
     postWorkers(salles[index]);
 
     selectWorkers.classList.remove("hide");
@@ -176,53 +177,51 @@ closeBtn.addEventListener("click", () => {
 let arrWorkers = [];
 
 function postWorkers(salle) {
-  selectors.innerHTML = "";
-
-  if (salle) {
-    if (salle === "conference") {
-      arrWorkers = employees.filter(
-        (item) =>
-          item.role === "manager" ||
-          item.role === "receptionniste" ||
-          item.role === "nettoyage"
-      );
-    }
-
-    if (salle === "reception") {
-      arrWorkers = employees.filter(
-        (item) =>
-          item.role === "manager" ||
-          item.role === "receptionniste" ||
-          item.role === "nettoyage" ||
-          item.role === "autre"
-      );
-    }
-
-    if (salle === "serveur") {
-      arrWorkers = employees.filter(
-        (item) => item.role === "manager" || item.role === "it"
-      );
-    }
-
-    if (salle === "security") {
-      arrWorkers = employees.filter(
-        (item) => item.role === "manager" || item.role === "securite"
-      );
-    }
-
-    if (salle === "archive") {
-      arrWorkers = employees.filter((item) => item.role === "manager");
-    }
-
-    if (salle === "personnel") {
-      arrWorkers = employees.filter(
-        (item) =>
-          item.role === "manager" ||
-          item.role === "receptionniste" ||
-          item.role === "nettoyage"
-      );
-    }
+  if (salle === "conference") {
+    arrWorkers = employees.filter(
+      (item) =>
+        item.role === "manager" ||
+        item.role === "receptionniste" ||
+        item.role === "nettoyage"
+    );
   }
+
+  if (salle === "reception") {
+    arrWorkers = employees.filter(
+      (item) =>
+        item.role === "manager" ||
+        item.role === "receptionniste" ||
+        item.role === "nettoyage" ||
+        item.role === "autre"
+    );
+  }
+
+  if (salle === "serveur") {
+    arrWorkers = employees.filter(
+      (item) => item.role === "manager" || item.role === "it"
+    );
+  }
+
+  if (salle === "security") {
+    arrWorkers = employees.filter(
+      (item) => item.role === "manager" || item.role === "securite"
+    );
+  }
+
+  if (salle === "archive") {
+    arrWorkers = employees.filter((item) => item.role === "manager");
+  }
+
+  if (salle === "personnel") {
+    arrWorkers = employees.filter(
+      (item) =>
+        item.role === "manager" ||
+        item.role === "receptionniste" ||
+        item.role === "nettoyage"
+    );
+  }
+
+  selectors.innerHTML = "";
 
   arrWorkers.forEach((el) => {
     selectors.innerHTML += `
