@@ -44,10 +44,25 @@
             class="row-start-2 row-end-27 col-start-2 col-end-31 border-3 bg-red-800/50 relative"
           >
             <div
-              id="card-room"
+              id="card-room-conference"
               class="w-full h-full absolute top-0 left-0 grid grid-cols-3 grid-rows-2 gap-x-2 gap-y-1"
+            ></div>
+            <div
+              id="conference-add-icon"
+              class="add-icon w-5 h-5 bg-neutral-950 absolute flex items-center justify-center top-1/2 right-1/2 translate-x-1/2 -translate-y-1/2"
             >
-              <div
+              <i class="bx bx-plus text-neutral-50"></i>
+            </div>
+          </div>
+          <div
+            id="server-room"
+            class="row-start-2 row-end-28 col-start-45 col-end-62 border-3 bg-red-800/50 relative"
+          >
+            <div
+              id="card-room-server"
+              class="w-full h-full absolute top-0 left-0 grid grid-cols-2 grid-rows-2 gap-x-2 gap-y-1"
+            >
+              <!-- <div
                 class="bg-amber-900 flex items-center justify-center flex-col relative"
               >
                 <i
@@ -60,19 +75,10 @@
                   />
                 </div>
                 <p class="text-amber-100 text-[10px]">HL</p>
-              </div>
+              </div> -->
             </div>
             <div
-              class="add-icon w-5 h-5 bg-neutral-950 absolute flex items-center justify-center top-1/2 right-1/2 translate-x-1/2 -translate-y-1/2"
-            >
-              <i class="bx bx-plus text-neutral-50"></i>
-            </div>
-          </div>
-          <div
-            id="server-room"
-            class="row-start-2 row-end-28 col-start-45 col-end-62 border-3 border-amber-400 relative"
-          >
-            <div
+              id="serveur-add-icon"
               class="add-icon w-5 h-5 bg-neutral-950 absolute flex items-center justify-center top-1/2 right-1/2 translate-x-1/2 -translate-y-1/2"
             >
               <i class="bx bx-plus text-neutral-50"></i>
@@ -83,16 +89,29 @@
             class="row-start-2 row-end-28 col-start-63 col-end-80 border-3 border-amber-400 relative"
           >
             <div
+              id="card-room-security"
+              class="w-full h-full absolute top-0 left-0 grid grid-cols-3 grid-rows-2 gap-x-2 gap-y-1"
+            ></div>
+
+            <div
+              id="serveur-add-icon"
               class="add-icon w-5 h-5 bg-neutral-950 absolute flex items-center justify-center top-1/2 right-1/2 translate-x-1/2 -translate-y-1/2"
             >
               <i class="bx bx-plus text-neutral-50"></i>
             </div>
           </div>
+
           <div
             id="reception"
             class="row-start-28 row-end-80 col-start-2 col-end-31 border-3 border-amber-400 relative"
           >
             <div
+              id="card-room-reception"
+              class="w-full h-full absolute top-0 left-0 grid grid-cols-2 grid-rows-2 gap-x-2 gap-y-1"
+            ></div>
+
+            <div
+              id="reception-add-icon"
               class="add-icon w-5 h-5 bg-neutral-950 absolute flex items-center justify-center top-1/2 right-1/2 translate-x-1/2 -translate-y-1/2"
             >
               <i class="bx bx-plus text-neutral-50"></i>
@@ -103,6 +122,11 @@
             class="row-start-54 row-end-80 col-start-45 col-end-62 border-3 border-amber-400 relative"
           >
             <div
+              id="card-room-staff"
+              class="w-full h-full absolute top-0 left-0 grid grid-cols-3 grid-rows-2 gap-x-2 gap-y-1"
+            ></div>
+            <div
+              id="staff-add-icon"
               class="add-icon w-5 h-5 bg-neutral-950 absolute flex items-center justify-center top-1/2 right-1/2 translate-x-1/2 -translate-y-1/2"
             >
               <i class="bx bx-plus text-neutral-50"></i>
@@ -113,6 +137,11 @@
             class="row-start-54 row-end-80 col-start-63 col-end-80 border-3 border-amber-400 relative"
           >
             <div
+              id="card-room-archive"
+              class="w-full h-full absolute top-0 left-0 grid grid-cols-3 grid-rows-2 gap-x-2 gap-y-1"
+            ></div>
+            <div
+              id="archive-add-icon"
               class="add-icon w-5 h-5 bg-neutral-950 absolute flex items-center justify-center top-1/2 right-1/2 translate-x-1/2 -translate-y-1/2"
             >
               <i class="bx bx-plus text-neutral-50"></i>
@@ -276,5 +305,82 @@
         </div>
       </div>
     </form>
+    <section
+      id="select-worker-serveur"
+      class="fixed w-5/7 h-6/8 overflow-y-scroll bg-white top-1/2 left-1/2 -translate-1/2 p-4 flex-col rounded-lg z-20 inset-0 hidden"
+    ></section>
+
+    <!-- post by profile -->
+
+    <section
+      id="select-workers"
+      class="absolute top-0 left-0 flex items-center hide justify-center w-full h-screen z-50 bg-[#00000072]"
+    >
+      <section class="bg-gray-300 w-86 relative rounded-sm p-2">
+        <p id="closeBtn" class="absolute right-4 top-3 z-50 cursor-pointer">
+          x
+        </p>
+        <h2 class="font-semibold text-2xl pb-2">select worker</h2>
+        <div id="selectors" class="min-h-50 flex flex-col gap-2">
+          <!-- <div class="bg-white flex items-center gap-2 p-2 rounded-sm">
+            <img
+              class="w-13 h-13 rounded-full"
+              src="/houssam.png"
+              alt="profile"
+            />
+            <div class="">
+              <p class="font-semibold text-xl">name</p>
+              <p class="font-semibold">role</p>
+            </div>
+            <p class="font-semibold text-gray-600 ml-auto">&plus;</p>
+          </div> -->
+        </div>
+      </section>
+    </section>
+
+    <!-- profile -->
+
+    <section
+      id="profile-worker"
+      class="absolute top-0 left-0 flex items-center justify-center w-full h-screen z-50 hide bg-[#00000072]"
+    >
+      <section
+        id="profile-workers-post"
+        class="bg-gray-100 text-gray-800 w-full max-w-[90%] relative rounded-sm p-2 px-10"
+      >
+        <!-- <p
+          id="closeBtn-profile"
+          class="absolute right-4 top-3 z-50 cursor-pointer"
+        >
+          x
+        </p>
+        <h2 class="font-semibold pb-4 text-2xl text-center">Profile Worker</h2>
+
+        <div class="flex items-center gap-4 mb-8">
+          <img class="w-20 h-20 rounded-full" src="/houssam.png" alt="" />
+          <div>
+            <p class="font-semibold text-gray-800 text-2xl">Houssam Largou</p>
+            <p class="font-semibold text-gray-700 text-xl">Manager</p>
+          </div>
+        </div>
+        <div
+          class="w-full border flex flex-col gap-5 p-4 border-gray-300 rounded-md"
+        >
+          <p class="font-semibold flex items-center gap-3">
+            Role :
+            <span class="text-gray-700">Manager</span>
+          </p>
+
+          <p class="font-semibold flex items-center gap-3">
+            Email :
+            <span class="text-gray-700">Manager@gmail.com</span>
+          </p>
+          <p class="font-semibold flex items-center gap-3">
+            Phone :
+            <span class="text-gray-700">0617848378</span>
+          </p>
+        </div> -->
+      </section>
+    </section>
   </body>
 </html>

@@ -25,7 +25,7 @@ const experienceContent = document.getElementById("experience-content");
 const photoInput = document.getElementById("photo-input");
 // add icon
 const addIcon = document.querySelectorAll(".add-icon");
-const cardRoom = document.getElementById("card-room");
+const cardRoomConference = document.getElementById("card-room-conference");
 
 // show-form;
 function showForm() {
@@ -48,16 +48,13 @@ closeIcon.addEventListener("click", hideForm);
 highlight.addEventListener("click", hideForm);
 // form
 let id = 1;
-let list = [];
+
 let dataIndex = 0;
 let employees = [];
-let receptionniste = [];
-let securite = [];
-let manager = [];
-let nettoyage = [];
-let it = [];
 let imageURL = "";
-
+roleSelect.addEventListener("change", function (e) {
+  roleValue = e.target.value;
+});
 function addEmployeeFormHandle(e) {
   e.preventDefault();
   if (photoInput.files && photoInput.files.length > 0) {
@@ -82,17 +79,37 @@ function addEmployeeFormHandle(e) {
     phone: phoneInput.value,
     url: imageURL,
   });
-  let cardContent = `
+
+  console.log(roleValue);
+
+  ///////////////////////////////
+  dataIndex++;
+  id++;
+
+  displaWorker();
+  hideForm();
+}
+
+// employees.forEach((el) => {
+//   console.log();
+// });
+employeeForm.addEventListener("submit", addEmployeeFormHandle.bind(this));
+
+function displaWorker() {
+  employeeCardsContainer.innerHTML = "";
+
+  employees.forEach((el) => {
+    employeeCardsContainer.innerHTML += `
   <div
-  data-id="${employees[dataIndex].id}"
-  id="employee-card-${employees[dataIndex].id}"
+  data-id="${el.id}"
+  id="employee-card-${el.id}"
           class="employee-card flex justify-between p-4 shadow-[0_0_20px_rgba(0,0,0,0.1)] rounded-lg items-center"
         >
           <div id="userProfileContainer" class="flex gap-2.5 items-center">
             <div class="userProfile w-10 h-10 rounded-full overflow-hidden">
-            <img src="${employees[dataIndex].url}" class="w-full h-full object-cover object-center" />
+            <img src="${el.url}" class="w-full h-full object-cover object-center" />
             </div>
-            <div>${employees[dataIndex].username} - ${employees[dataIndex].role}</div>
+            <div id="profile-${el.id}" >${el.username} - ${el.role}</div>
             </div>
           <div class="delete-icon cursor-pointer">
             <svg
@@ -111,233 +128,431 @@ function addEmployeeFormHandle(e) {
           </div>
         </div>
         `;
-  employeeCardsContainer.insertAdjacentHTML("beforeend", cardContent);
-  // list
-  list.push(employees[dataIndex]);
-  // roles
-  if (employees[dataIndex].role == "receptionniste")
-    receptionniste.push(employees[dataIndex]);
-  else if (employees[dataIndex].role == "it") it.push(employees[dataIndex]);
-  else if (employees[dataIndex].role == "securite")
-    securite.push(employees[dataIndex]);
-  else if (employees[dataIndex].role == "manager")
-    manager.push(employees[dataIndex]);
-  else if (employees[dataIndex].role == "nettoyage")
-    nettoyage.push(employees[dataIndex]);
-  ///////////////////////////////
-  dataIndex++;
-  id++;
-  hideForm();
+  });
 }
-employeeForm.addEventListener("submit", addEmployeeFormHandle.bind(this));
 
-// delete
+const addSalles = document.querySelectorAll(".add-icon");
+let selectors = document.getElementById("selectors");
+const closeBtn = document.getElementById("closeBtn");
+const selectWorkers = document.getElementById("select-workers");
+const cardRoomReception = document.getElementById("card-room-reception");
+const cardRoomsServer = document.getElementById("card-room-server");
+const cardRoomsSc = document.getElementById("card-room-security");
+const cardRoomsPr = document.getElementById("card-room-staff");
+const cardRoomsAr = document.getElementById("card-room-archive");
+const prolifeWorkersPost = document.getElementById("profile-workers-post");
+const prolifeWorker = document.getElementById("profile-worker");
 
-employeeCardsContainer.addEventListener("click", function (e) {
-  let deleteTarget = e.target.closest(".delete-icon");
-  let idTarget = e.target.closest(".employee-card").dataset.id;
-  if (!deleteTarget) return;
-  deleteTarget.closest(".employee-card").remove();
-  for (const i in employees) {
-    if (employees[i].id == idTarget) employees.splice(i, 1);
-  }
-});
+console.log(prolifeWorkersPost, prolifeWorker);
 
-// add experiences
-let newExperience;
-addExperienceBtn.addEventListener("click", function () {
-  newExperience = `
-          <div class="p-3 rounded-lg flex flex-col gap-4 bg-neutral-950/3">
-            <div class="flex flex-col">
-              <span class="font-bold">Entreprise</span>
-              <input
-                type="text"
-                class="border border-neutral-700/20 py-2 px-3 rounded-lg bg-white"
-              />
-            </div>
-            <div class="flex flex-col">
-              <span class="font-bold">Date début</span>
-              <input
-                id="dateDebut-input"
-                type="date"
-                class="border border-neutral-700/20 py-2 px-3 rounded-lg bg-white w-full"
-                placeholder="jj/mm/aaaa"
-              />
-            </div>
-            <div class="flex flex-col">
-              <span class="font-bold">Date fin</span>
-              <input
-                id="dateFin-input"
-                type="date"
-                placeholder="jj/mm/aaaa"
-                class="border border-neutral-700/20 py-2 px-3 rounded-lg bg-white w-full"
-              />
-            </div>
-            <div class="flex flex-col gap-0.5">
-              <span class="font-bold">Description</span>
-              <textarea
-                id="description-input"
-                placeholder="Ajouter une description..."
-                class="h-20 bg-white p-3"
-              ></textarea>
-            </div>
-          </div>
-  `;
-  experienceContent.insertAdjacentHTML("beforeend", newExperience);
-});
 // rooms
 let conference = [];
-let reception = [];
+let receptionW = [];
 let serveurs = [];
 let securiteRoom = [];
 let personnel = [];
 let archives = [];
 
-// + icon
-// conference
-let cardRoomContent;
-let cardRoomCount = 0;
-let workerName = "";
+const salles = [
+  "conference",
+  "serveur",
+  "security",
+  "reception",
+  "staff",
+  "archive",
+];
+addSalles.forEach((el, index) => {
+  el.addEventListener("click", () => {
+    postWorkers(salles[index]);
 
-addIcon.forEach((el) => {
-  el.addEventListener("click", function (e) {
-    if (conference.length >= 5) return;
-    if (e.target.closest("#conference-room")) {
-      if (receptionniste.length == 1) {
-        workerName = receptionniste[0].username
-          .split(" ")
-          .map((el) => el[0])
-          .join("")
-          .toUpperCase("");
-        cardRoomContent = `
-       <div
-               data-id="${receptionniste[0].id}" class="room-worker bg-amber-900 flex items-center justify-center flex-col relative"
-              >
-                            <i class='remove-icon bx bxs-minus-circle text-red-700 text-[10px] absolute top-0 right-0 translate-x-1/3 -translate-y-1/3'></i> 
-
-                <div class="userProfile w-3 h-3 rounded-full overflow-hidden">
-                  <img
-                    src="${receptionniste[0].url}"
-                    class="w-full h-full object-cover object-center"
-                  />
-                </div>
-                <p class="text-amber-100 text-[10px]">${workerName}</p>
-              </div>
-       `;
-        cardRoom.insertAdjacentHTML("beforeend", cardRoomContent);
-        document
-          .getElementById(`employee-card-${receptionniste[0].id}`)
-          .remove();
-        conference.push(receptionniste[0]);
-        list.find((el, i) => {
-          if (el.id == receptionniste[0].id) list.splice(i, 1);
-        });
-        receptionniste.splice(0, 1);
-        // receptionniste = [];
-      } else if (receptionniste.length > 1 && receptionniste.length <= 6) {
-        selectWorkerConference.innerHTML = "";
-        selectWorkerConference.classList.remove("hidden");
-        selectWorkerConference.classList.add("flex", "flex-col", "gap-2");
-        for (let i = 0; i < receptionniste.length; i++) {
-          selectWorkerConference.insertAdjacentHTML(
-            "beforeend",
-            `
-          <div
-          data-id="${receptionniste[i].id}"
-          id="conference-card-${receptionniste[i].id}"
-          class="conference-card flex flex-col justify-between p-4 rounded-lg items-center gap-2 shadow-[0_0_20px_rgba(0,0,0,0.1)]"
-        >
-        <div id="userProfileContainer" class="flex gap-2.5 items-center">
-            <div class="userProfile w-10 h-10 rounded-full overflow-hidden">
-            <img src="${receptionniste[i].url}" class="w-full h-full object-cover object-center" />
-            </div>
-            <div>${receptionniste[i].username} - ${receptionniste[i].role}</div>
-          </div>
-        </div>
-            `
-          );
-        }
-      } else return;
-    }
+    selectWorkers.classList.remove("hide");
   });
 });
-//////////////////////////////////////
-const selectWorkerConference = document.getElementById(
-  "select-worker-conference"
-);
-selectWorkerConference.addEventListener("click", function (e) {
-  const card = e.target.closest(".conference-card");
-  if (!card) return;
-  const cardId = +e.target.closest(".conference-card").dataset.id;
-  const index = receptionniste.findIndex((el) => el.id == cardId);
-  const worker = receptionniste[index];
-  conference.push(worker);
-  receptionniste.splice(index, 1);
-  document.getElementById(`employee-card-${cardId}`).classList.add("hidden");
-  card.classList.add("hidden");
-  selectWorkerConference.classList.remove("flex", "flex-col", "gap-2");
-  selectWorkerConference.classList.add("hidden");
-  const uniqueWorker = employees.find((el) => el.id == cardId);
-  workerName = uniqueWorker.username
-    .split(" ")
-    .map((el) => el[0])
-    .join("")
-    .toUpperCase("");
-  cardRoomContent = `
-      <div
-                id="room-worker-${uniqueWorker.id}" data-id="${uniqueWorker.id}" class="room-worker bg-amber-900 flex items-center justify-center flex-col relative"
+
+closeBtn.addEventListener("click", () => {
+  selectWorkers.classList.add("hide");
+});
+
+let arrWorkers = [];
+
+function postWorkers(salle) {
+  selectors.innerHTML = "";
+
+  if (salle) {
+    if (salle === "conference") {
+      arrWorkers = employees.filter(
+        (item) =>
+          item.role === "manager" ||
+          item.role === "receptionniste" ||
+          item.role === "nettoyage"
+      );
+    }
+
+    if (salle === "reception") {
+      arrWorkers = employees.filter(
+        (item) =>
+          item.role === "manager" ||
+          item.role === "receptionniste" ||
+          item.role === "nettoyage" ||
+          item.role === "autre"
+      );
+    }
+
+    if (salle === "serveur") {
+      arrWorkers = employees.filter(
+        (item) => item.role === "manager" || item.role === "it"
+      );
+    }
+
+    if (salle === "security") {
+      arrWorkers = employees.filter(
+        (item) => item.role === "manager" || item.role === "securite"
+      );
+    }
+
+    if (salle === "archive") {
+      arrWorkers = employees.filter((item) => item.role === "manager");
+    }
+
+    if (salle === "personnel") {
+      arrWorkers = employees.filter(
+        (item) =>
+          item.role === "manager" ||
+          item.role === "receptionniste" ||
+          item.role === "nettoyage"
+      );
+    }
+  }
+
+  arrWorkers.forEach((el) => {
+    selectors.innerHTML += `
+        <div class="bg-white flex items-center gap-2 p-2 rounded-sm">
+            <img
+              class="w-13 h-13 rounded-full"
+              src="/houssam.png"
+              alt="profile"
+            />
+            <div class="">
+              <p id="profile-user-${el.id}" class="font-semibold text-xl">${el.username}</p>
+              <p class="font-semibold">${el.role}</p>
+            </div>
+            <p id="plus-${el.id}" class="font-semibold cursor-pointer text-gray-600 ml-auto">&plus;</p>
+          </div>
+`;
+  });
+
+  arrWorkers.forEach((el) => {
+    const openProfile = document.getElementById(`profile-user-${el.id}`);
+    console.log(openProfile);
+
+    openProfile.addEventListener("click", () => {
+      console.log("kgjhbhj");
+
+      prolifeWorker.classList.remove("hide");
+      profile(el);
+    });
+  });
+
+  arrWorkers.forEach((el) => {
+    const plus = document.getElementById(`plus-${el.id}`);
+
+    plus.addEventListener("click", () => {
+      removeCardFromSalle(el, salle);
+      // arrWorkers = arrWorkers.filter((ele) =>  ele.id !== el.id)
+
+      //  postWorkers(salle)
+    });
+  });
+}
+
+function removeCardFromSalle(el, salle) {
+  if (salle !== "conference") {
+    conference = conference.filter((item) => item.id !== el.id);
+  }
+  if (salle !== "reception") {
+    receptionW = receptionW.filter((item) => item.id !== el.id);
+  }
+  if (salle !== "security") {
+    securiteRoom = securiteRoom.filter((item) => item.id !== el.id);
+  }
+  if (salle !== "serveur") {
+    serveurs = serveurs.filter((item) => item.id !== el.id);
+  }
+  if (salle !== "staff") {
+    personnel = personnel.filter((item) => item.id !== el.id);
+  }
+  if (salle !== "archive") {
+    archives = archives.filter((item) => item.id !== el.id);
+  }
+  if (salle !== "backHome") {
+    arrWorkers = arrWorkers.filter((item) => item.id !== el.id);
+  }
+
+  if (salle !== "home") {
+    employees = employees.filter((item) => item.id !== el.id);
+  }
+
+  switch (salle) {
+    case "conference":
+      if (!conference.some((ele) => ele.id === el.id)) {
+        conference.push(el);
+      }
+      break;
+    case "reception":
+      if (!receptionW.some((ele) => ele.id === el.id)) {
+        receptionW.push(el);
+      }
+      break;
+    case "archive":
+      if (!archives.some((ele) => ele.id === el.id)) {
+        archives.push(el);
+      }
+      break;
+    case "staff":
+      if (!personnel.some((ele) => ele.id === el.id)) {
+        personnel.push(el);
+      }
+      break;
+    case "security":
+      if (!securiteRoom.some((ele) => ele.id === el.id)) {
+        securiteRoom.push(el);
+      }
+      break;
+    case "serveur":
+      if (!serveurs.some((ele) => ele.id === el.id)) {
+        serveurs.push(el);
+        console.log(serveurs);
+      }
+
+      break;
+    case "backHome":
+      if (!arrWorkers.some((ele) => ele.id === el.id)) {
+        arrWorkers.push(el);
+        console.log(arrWorkers);
+      }
+
+      break;
+    case "home":
+      if (!employees.some((ele) => ele.id === el.id)) {
+        employees.push(el);
+        console.log(employees);
+      }
+
+      break;
+  }
+
+  // call functions for updating
+  Conference();
+  Reception();
+  Serveur();
+  Security();
+  Personnel();
+  Archives();
+  postWorkers();
+  displaWorker();
+}
+
+function Conference() {
+  cardRoomConference.innerHTML = "";
+  conference.forEach((el) => {
+    cardRoomConference.innerHTML += `
+
+  <div
+                class="room-worker bg-amber-900 flex items-center justify-center flex-col relative"
               >
-              <i class='remove-icon bx bxs-minus-circle text-red-700 text-[10px] absolute top-0 right-0 translate-x-1/3 -translate-y-1/3'></i> 
+                            <i id="remove-${el.id}" class='remove-icon bx bxs-minus-circle text-red-700 text-[10px] absolute top-0 right-0 translate-x-1/3 -translate-y-1/3'></i> 
+
                 <div class="userProfile w-3 h-3 rounded-full overflow-hidden">
                   <img
-                    src="${uniqueWorker.url}"
+                    src="houssam.png"
                     class="w-full h-full object-cover object-center"
                   />
                 </div>
-                <p class="text-amber-100 text-[10px]">${workerName}</p>
+                <p class="text-amber-100 text-[10px]">${el.username}</p>
               </div>
-      `;
-  document.getElementById(`employee-card-${cardId}`).remove();
-  cardRoom.insertAdjacentHTML("beforeend", cardRoomContent);
-});
 
-cardRoom.addEventListener("click", function (e) {
-  const removeBtn = e.target.closest(".remove-icon");
-  if (!removeBtn) return;
-  const removeBtnId = +removeBtn.closest(".room-worker").dataset.id;
-  let uniqueWorker = conference.find((el) => el.id == removeBtnId);
-  let index = conference.findIndex((el) => el.id == removeBtnId);
-  receptionniste.push(conference[index]);
-  conference.splice(index, 1);
-  let cardContent = `
+`;
+  });
+  conference.forEach((el) => {
+    remove(el);
+  });
+}
+function Reception() {
+  cardRoomReception.innerHTML = "";
+  receptionW.forEach((el) => {
+    cardRoomReception.innerHTML += `
+
   <div
-  data-id="${uniqueWorker.id}"
-  id="employee-card-${uniqueWorker.id}"
-          class="employee-card flex justify-between p-4 shadow-[0_0_20px_rgba(0,0,0,0.1)] rounded-lg items-center"
+                class="room-worker bg-amber-900 flex items-center justify-center flex-col relative"
+              >
+                            <i id="remove-${el.id}" class='remove-icon bx bxs-minus-circle text-red-700 text-[10px] absolute top-0 right-0 translate-x-1/3 -translate-y-1/3'></i> 
+
+                <div class="userProfile w-3 h-3 rounded-full overflow-hidden">
+                  <img
+                    src="houssam.png"
+                    class="w-full h-full object-cover object-center"
+                  />
+                </div>
+                <p class="text-amber-100 text-[10px]">${el.username}</p>
+              </div>
+
+`;
+  });
+  receptionW.forEach((el) => {
+    remove(el);
+  });
+}
+function Serveur() {
+  cardRoomsServer.innerHTML = "";
+  console.log(serveurs);
+
+  serveurs.forEach((el) => {
+    cardRoomsServer.innerHTML += `
+
+  <div
+                class="room-worker bg-amber-900 flex items-center justify-center flex-col relative"
+              >
+                            <i id="remove-${el.id}" class='remove-icon bx bxs-minus-circle text-red-700 text-[10px] absolute top-0 right-0 translate-x-1/3 -translate-y-1/3'></i> 
+
+                <div class="userProfile w-3 h-3 rounded-full overflow-hidden">
+                  <img
+                    src="houssam.png"
+                    class="w-full h-full object-cover object-center"
+                  />
+                </div>
+                <p class="text-amber-100 text-[10px]">${el.username}</p>
+              </div>
+
+`;
+  });
+  serveurs.forEach((el) => {
+    remove(el);
+  });
+}
+function Security() {
+  cardRoomsSc.innerHTML = "";
+  securiteRoom.forEach((el) => {
+    cardRoomsSc.innerHTML += `
+
+  <div
+                class="room-worker bg-amber-900 flex items-center justify-center flex-col relative"
+              >
+                            <i id="remove-${el.id}" class='remove-icon bx bxs-minus-circle text-red-700 text-[10px] absolute top-0 right-0 translate-x-1/3 -translate-y-1/3'></i> 
+
+                <div class="userProfile w-3 h-3 rounded-full overflow-hidden">
+                  <img
+                    src="houssam.png"
+                    class="w-full h-full object-cover object-center"
+                  />
+                </div>
+                <p class="text-amber-100 text-[10px]">${el.username}</p>
+              </div>
+
+`;
+  });
+  securiteRoom.forEach((el) => {
+    remove(el);
+  });
+}
+function Personnel() {
+  cardRoomsPr.innerHTML = "";
+  personnel.forEach((el) => {
+    cardRoomsPr.innerHTML += `
+
+  <div
+                class="room-worker bg-amber-900 flex items-center justify-center flex-col relative"
+              >
+                            <i id="remove-${el.id}" class='remove-icon bx bxs-minus-circle text-red-700 text-[10px] absolute top-0 right-0 translate-x-1/3 -translate-y-1/3'></i> 
+
+                <div class="userProfile w-3 h-3 rounded-full overflow-hidden">
+                  <img
+                    src="houssam.png"
+                    class="w-full h-full object-cover object-center"
+                  />
+                </div>
+                <p class="text-amber-100 text-[10px]">${el.username}</p>
+              </div>
+
+`;
+  });
+  personnel.forEach((el) => {
+    remove(el);
+  });
+}
+function Archives() {
+  cardRoomsAr.innerHTML = "";
+  archives.forEach((el) => {
+    cardRoomsAr.innerHTML += `
+
+  <div
+                class="room-worker bg-amber-900 flex items-center justify-center flex-col relative"
+              >
+                            <i id="remove-${el.id}" class='remove-icon bx bxs-minus-circle text-red-700 text-[10px] absolute top-0 right-0 translate-x-1/3 -translate-y-1/3'></i> 
+
+                <div class="userProfile w-3 h-3 rounded-full overflow-hidden">
+                  <img
+                    src="houssam.png"
+                    class="w-full h-full object-cover object-center"
+                  />
+                </div>
+                <p class="text-amber-100 text-[10px]">${el.username}</p>
+              </div>
+
+`;
+  });
+  archives.forEach((el) => {
+    remove(el);
+  });
+}
+function remove(el) {
+  const remove = document.getElementById(`remove-${el.id}`);
+  remove.addEventListener("click", () => {
+    removeCardFromSalle(el, "home");
+  });
+}
+
+function profile(el) {
+  console.log(el);
+
+  prolifeWorkersPost.innerHTML = `
+  
+          <p
+          id="closeBtn-profile"
+          class="absolute right-4 top-3 z-50 cursor-pointer"
         >
-          <div id="userProfileContainer" class="flex gap-2.5 items-center">
-            <div class="userProfile w-10 h-10 rounded-full overflow-hidden">
-            <img src="${uniqueWorker.url}" class="w-full h-full object-cover object-center" />
-            </div>
-            <div>${uniqueWorker.username} - ${uniqueWorker.role}</div>
-            </div>
-          <div class="delete-icon cursor-pointer">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              x="0px"
-              y="0px"
-              width="30"
-              height="30"
-              viewBox="0 0 30 30"
-              style="fill: #fa5252"
-            >
-              <path
-                d="M 14.984375 2.4863281 A 1.0001 1.0001 0 0 0 14 3.5 L 14 4 L 8.5 4 A 1.0001 1.0001 0 0 0 7.4863281 5 L 6 5 A 1.0001 1.0001 0 1 0 6 7 L 24 7 A 1.0001 1.0001 0 1 0 24 5 L 22.513672 5 A 1.0001 1.0001 0 0 0 21.5 4 L 16 4 L 16 3.5 A 1.0001 1.0001 0 0 0 14.984375 2.4863281 z M 6 9 L 7.7929688 24.234375 C 7.9109687 25.241375 8.7633438 26 9.7773438 26 L 20.222656 26 C 21.236656 26 22.088031 25.241375 22.207031 24.234375 L 24 9 L 6 9 z"
-              ></path>
-            </svg>
-            </div>
-            </div>
-            `;
-  employeeCardsContainer.insertAdjacentHTML("beforeend", cardContent);
-  removeBtn.closest(".room-worker").classList.add("hidden");
-});
+          x
+        </p>
+        <h2 class="font-semibold pb-4 text-2xl text-center">Profile Worker</h2>
+
+        <div class="flex items-center gap-4 mb-8">
+          <img class="w-20 h-20 rounded-full" src="/houssam.png" alt="" />
+          <div>
+            <p class="font-semibold text-gray-800 text-2xl">${el.username}</p>
+            <p class="font-semibold text-gray-700 text-xl">${el.role}</p>
+          </div>
+        </div>
+        <div
+          class="w-full border flex flex-col gap-5 p-4 border-gray-300 rounded-md"
+        >
+          <p class="font-semibold flex items-center gap-3">
+            Role :
+            <span class="text-gray-700">${el.role}</span>
+          </p>
+
+          <p class="font-semibold flex items-center gap-3">
+            Email :
+            <span class="text-gray-700">${el.email}</span>
+          </p>
+          <p class="font-semibold flex items-center gap-3">
+            Phone :
+            <span class="text-gray-700">${el.phone}</span>
+          </p>
+        </div>
+  
+  
+  `;
+
+  document.getElementById("closeBtn-profile").addEventListener("click", () => {
+    prolifeWorker.classList.add("hide");
+  });
+}
