@@ -3,7 +3,7 @@ const addEmployeeBtn = document.getElementById("add-employee-btn");
 const highlight = document.getElementById("highlight");
 const header = document.getElementById("header");
 const employeeForm = document.getElementById("employee-form");
-const closeIcon = document.getElementById("form__close-icon");
+const closeIcon = documqent.getElementById("form__close-icon");
 // form
 const usernameInput = document.getElementById("username-input");
 let roleSelect = document.getElementById("role-select");
